@@ -15,7 +15,7 @@ task bamstats {
 	}
 
 	runtime {
-		docker: "quay.io/collaboratory/dockstore-tool-bamstats:1.25-7"
+		docker: "ghcr.io/dockstore/dockstore-tool-bamstats:1.25-8"
 		memory: mem_gb + "GB"
 	}
 

@@ -15,7 +15,7 @@ dct:creator:
 
 requirements:
   - class: DockerRequirement
-    dockerPull: "quay.io/collaboratory/dockstore-tool-bamstats:1.25-7"
+    dockerPull: "ghcr.io/dockstore/dockstore-tool-bamstats:1.25-8"
 
 inputs:
   input:

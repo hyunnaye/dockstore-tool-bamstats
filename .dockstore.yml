@@ -1,0 +1,29 @@
+version: 1.2
+tools:
+  - subclass: CWL
+    primaryDescriptorPath: /bamstats.cwl
+    testParameterFiles:
+      - /test.json
+    name: bamstats_cwl
+    authors:
+      - orcid: 0000-0002-6130-1021
+  - subclass: CWL
+    primaryDescriptorPath: /bamstats_sort.cwl
+    testParameterFiles:
+      - /test.json
+    name: bamstats_sort_cwl
+    authors:
+      - orcid: 0000-0002-6130-1021
+workflows:
+  - subclass: WDL
+    primaryDescriptorPath: /bamstats.wdl
+    testParameterFiles:
+      - /test.wdl.json
+    name: wdl
+    authors:
+      - orcid: 0000-0002-6130-1021
+  - subclass: NFL
+    primaryDescriptorPath: /nextflow.config
+    name: nfl
+    authors:
+      - orcid: 0000-0002-6130-1021               

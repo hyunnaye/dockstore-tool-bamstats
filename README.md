@@ -1,6 +1,3 @@
-[![Docker Repository on Quay.io](https://quay.io/repository/collaboratory/dockstore-tool-bamstats/status "Docker Repository on Quay.io")](https://quay.io/repository/collaboratory/dockstore-tool-bamstats)
-[![Build Status](https://travis-ci.org/CancerCollaboratory/dockstore-tool-bamstats.svg)](https://travis-ci.org/CancerCollaboratory/dockstore-tool-bamstats)
-
 # dockstore-tool-bamstats
 
 A repo for the `Dockerfile` to create a Docker image for the BAMStats command. Also contains the
@@ -11,29 +8,20 @@ this container and describe how to call BAMStats for the community.
 
 This tool has been validated as a CWL draft-3 and v1.0 CommandLineTool. 
 
-Versions that we tested with are the following 
-```
-avro (1.8.1)
-cwl-runner (1.0)
-cwl-upgrader (0.1.1)
-cwltool (1.0.20190915164430)
-schema-salad (4.5.20190906201758)
-setuptools (25.1.6)
-```
+Versions that we tested with are documented iin https://raw.githubusercontent.com/dockstore/dockstore/1.13.0-beta.3/dockstore-webservice/src/main/resources/requirements/1.13.0/requirements3.txt
 
 
 ## Building Manually
 
-Normally you would let [Quay.io](http://quay.io) build this.  But, if you need to build
-manually you would execute:
+Normally you would let GitHub actions build this.  But, if you need to build manually (for example due to https://github.com/broadinstitute/cromwell/issues/6827)  you would execute:
 
-    docker build -t collaboratory/dockstore-tool-bamstats:1.25-7 .
+    docker build -t ghcr.io/dockstore/dockstore-tool-bamstats:1.25-8 .
 
 ## Running Manually
 
 ```
 $ wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/NA12878/alignment/NA12878.chrom20.ILLUMINA.bwa.CEU.low_coverage.20121211.bam
-$ docker run -it -v `pwd`/NA12878.chrom20.ILLUMINA.bwa.CEU.low_coverage.20121211.bam:/NA12878.chrom20.ILLUMINA.bwa.CEU.low_coverage.20121211.bam collaboratory/dockstore-tool-bamstats:1.25-7
+$ docker run -it -v `pwd`/NA12878.chrom20.ILLUMINA.bwa.CEU.low_coverage.20121211.bam:/NA12878.chrom20.ILLUMINA.bwa.CEU.low_coverage.20121211.bam ghcr.io/dockstore/dockstore-tool-bamstats:1.25-8
 
 # within the docker container
 $ /usr/local/bin/bamstats 4 /NA12878.chrom20.ILLUMINA.bwa.CEU.low_coverage.20121211.bam
@@ -70,16 +58,16 @@ Run it using the `dockstore` CLI:
 
 ```
 # Fetch CWL workflow
-dockstore tool cwl --entry quay.io/collaboratory/dockstore-tool-bamstats:1.25-7 > Dockstore.cwl
+dockstore workflow cwl --entry github.com/dockstore/dockstore-tool-bamstats/bamstats_cwl:feature/update > bamstats.cwl
 
 # Make a runtime JSON template and edit it (or use the content of sample_configs.json above)
-dockstore tool convert cwl2json --cwl Dockstore.cwl > Dockstore.json
+dockstore workflow convert cwl2json --cwl bamstats.cwl > Dockstore.json
 
 # Update the "path" field for both input and output files within Dockstore.json
 jq '.bam_input.path |= "ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/NA12878/alignment/NA12878.chrom20.ILLUMINA.bwa.CEU.low_coverage.20121211.bam"| .bamstats_report.path |= "/tmp/bamstats_report.zip"' Dockstore.json | sponge  Dockstore.json
 
 # Run it locally with the Dockstore CLI
-dockstore tool launch --entry quay.io/collaboratory/dockstore-tool-bamstats:1.25-7 --json Dockstore.json
+dockstore workflow launch --entry github.com/dockstore/dockstore-tool-bamstats/bamstats_cwl:feature/update --json Dockstore.json
 ```
 
 ### With WDL
@@ -101,11 +89,11 @@ Run it using the `dockstore` CLI:
 ```
 Usage:
 # fetch WDL
-$> dockstore tool wdl --entry quay.io/collaboratory/dockstore-tool-bamstats > Dockstore.wdl
+$> dockstore workflow wdl --entry github.com/dockstore/dockstore-tool-bamstats/wdl:feature/update > bamstats.wdl
 # make a runtime JSON template and edit it (or use the content of test.wdl.json above)
-$> dockstore tool convert wdl2json --wdl Dockstore.wdl > Dockstore.json
+$> dockstore workflow convert wdl2json --wdl bamstats.wdl > Dockstore.json
 # run it locally with the Dockstore CLI
-$> dockstore tool launch --entry quay.io/collaboratory/dockstore-tool-bamstats --json Dockstore.json
+$> dockstore workflow launch --entry github.com/dockstore/dockstore-tool-bamstats/wdl:feature/update --json Dockstore.json
 ```
 
 ## Running Nextflow Workflow
