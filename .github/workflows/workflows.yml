@@ -29,5 +29,22 @@ jobs:
 
     - name: Setup engines
       run: bash install.sh
-    - name: Run workflows
-      run: bash script.sh
+    - name: Setup CLI 
+      run: | 
+        curl -L -o dockstore https://github.com/dockstore/dockstore/releases/download/1.12.2/dockstore
+        chmod +x dockstore       
+        mkdir /home/runner/dockstore_bin
+        mv dockstore /home/runner/dockstore_bin
+        echo "/home/runner/dockstore_bin" >> $GITHUB_PATH
+    - name: Prime CLI
+      run: | 
+        echo "$PATH"
+        mkdir ~/.dockstore
+        printf "cromwell-vm-options: -DLOG_LEVEL=ERROR\nserver-url: https://dockstore.org/api" > ~/.dockstore/config
+        dockstore
+
+    - if: matrix.lang == 'cwl'
+      run: sudo apt-get install -y moreutils
+
+    - name: Run workflows with CLI
+      run: bash cli-script.sh
